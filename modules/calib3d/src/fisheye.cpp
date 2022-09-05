@@ -275,8 +275,8 @@ void cv::fisheye::distortPoints(InputArray undistorted, OutputArray distorted, I
     else
     {
         Matx33d camMat = K.getMat();
-        f = Vec2d(camMat(0, 0), camMat(1, 1));
-        c = Vec2d(camMat(0 ,2), camMat(1, 2));
+        f = Vec2d(camMat(0, 0), camMat(1, 1)); //fx, fy
+        c = Vec2d(camMat(0 ,2), camMat(1, 2)); //cx, cy
     }
 
     Vec4d k = D.depth() == CV_32F ? (Vec4d)*D.getMat().ptr<Vec4f>(): *D.getMat().ptr<Vec4d>();
@@ -302,9 +302,9 @@ void cv::fisheye::distortPoints(InputArray undistorted, OutputArray distorted, I
         double theta_d = theta + k[0]*theta3 + k[1]*theta5 + k[2]*theta7 + k[3]*theta9;
 
         double inv_r = r > 1e-8 ? 1.0/r : 1;
-        double cdist = r > 1e-8 ? theta_d * inv_r : 1;
+        double cdist = r > 1e-8 ? theta_d * inv_r : 1;  //theta_d/r
 
-        Vec2d xd1 = x * cdist;
+        Vec2d xd1 = x * cdist; //x is img coordinate
         Vec2d xd3(xd1[0] + alpha*xd1[1], xd1[1]);
         Vec2d final_point(xd3[0] * f[0] + c[0], xd3[1] * f[1] + c[1]);
 
@@ -337,8 +337,8 @@ void cv::fisheye::undistortPoints( InputArray distorted, OutputArray undistorted
     if (K.depth() == CV_32F)
     {
         Matx33f camMat = K.getMat();
-        f = Vec2f(camMat(0, 0), camMat(1, 1));
-        c = Vec2f(camMat(0, 2), camMat(1, 2));
+        f = Vec2f(camMat(0, 0), camMat(1, 1));  //fx, fy
+        c = Vec2f(camMat(0, 2), camMat(1, 2));  //cx, cy
     }
     else
     {
